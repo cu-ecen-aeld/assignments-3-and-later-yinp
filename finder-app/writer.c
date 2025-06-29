@@ -17,9 +17,12 @@ int main(int argc, char *argv[])
 {
 	FILE *fp;
 
+	openlog("writer", LOG_PID, LOG_USER);  // Open connection to syslog with LOG_USER facility
+
 	if (argc != 3)
 	{
 		syslog(LOG_ERR, "There should be two input arguments.");
+		closelog();
 		return 1;
 	}
 
@@ -28,6 +31,7 @@ int main(int argc, char *argv[])
 	if (fp == NULL)
 	{
 		syslog(LOG_ERR, "The file %s can't be opened.", argv[1]);
+		closelog();
 		return 1;
 	}
 
@@ -40,7 +44,7 @@ int main(int argc, char *argv[])
 	fclose(fp);
 
 	syslog(LOG_DEBUG, "The file %s is closed.", argv[1]);
-
+	closelog();
 	
 	return 0;
 }
